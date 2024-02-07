@@ -1,0 +1,162 @@
+
+//+------------------------------------------------------------------+
+//|                                                 OverPower MT5    |
+//|                                 Copyright © 2022 Forex Robot Easy Team |
+//|                                          Developer's site: forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  This code implements the OverPower MT5 trading software based on |
+//|  the provided terms of reference.                                 |
+//|                                                                  |
+//+------------------------------------------------------------------+
+
+// Define necessary input parameters
+input string Symbol1 = 'EURUSD';
+input string Symbol2 = 'GBPUSD';
+
+// Define necessary variables
+double mainLotSize;
+bool isLearningMode;
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Initialization function called when the EA is first initialized |
+//|                                                                  |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Set initial lot size based on account type
+    if(AccountType() == ACCOUNT_PROP_FIRM_CHALLENGE || AccountType() == ACCOUNT_VERIFICATION || AccountType() == ACCOUNT_FUNDED)
+        mainLotSize = 0.01; // Set lot size for proprietary trading accounts
+    else
+        mainLotSize = 0.1;  // Set lot size for other types of accounts
+    
+    // Set learning mode based on market conditions
+    if(IsTrendingMarket(Symbol1) || IsTrendingMarket(Symbol2))
+        isLearningMode = false; // Disable learning mode in trending markets
+    else
+        isLearningMode = true;  // Enable learning mode in non-trending markets
+    
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Start function called when the EA is started or restarted        |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void OnStart()
+{
+    while(IsTradeAllowed() && !IsStopped())
+    {
+        // Check if learning mode is enabled
+        if(isLearningMode)
+        {
+            // Learn from market trends
+            LearnFromMarketTrends(Symbol1, Symbol2);
+        }
+        
+        // Implement trading logic
+        if(IsBuySignal())
+        {
+            Buy(mainLotSize, Symbol1, Symbol2);
+        }
+        else if(IsSellSignal())
+        {
+            Sell(mainLotSize, Symbol1, Symbol2);
+        }
+        
+        // Check for stop conditions
+        if(IsStopConditionReached())
+        {
+            StopTrading();
+        }
+        
+        Sleep(1000); // Wait for 1 second before checking again
+    }
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to learn from market trends                             |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void LearnFromMarketTrends(string symbol1, string symbol2)
+{
+    // Implement learning algorithm here
+    // ...
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to check for buy signal                                 |
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsBuySignal()
+{
+    // Implement buy signal logic here
+    // ...
+    
+    return true; // If buy signal is detected
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to check for sell signal                                |
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsSellSignal()
+{
+    // Implement sell signal logic here
+    // ...
+    
+    return true; // If sell signal is detected
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to execute buy trade                                    |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void Buy(double lotSize, string symbol1, string symbol2)
+{
+    // Execute buy trade logic here
+    // ...
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to execute sell trade                                   |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void Sell(double lotSize, string symbol1, string symbol2)
+{
+    // Execute sell trade logic here
+    // ...
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to check if stop condition is reached                   |
+//|                                                                  |
+//+------------------------------------------------------------------+
+bool IsStopConditionReached()
+{
+    // Implement stop condition logic here
+    // ...
+    
+    return false; // If stop condition is not reached
+}
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//|  Function to stop trading                                         |
+//|                                                                  |
+//+------------------------------------------------------------------+
+void StopTrading()
+{
+    // Implement trading stop logic here
+    // ...
+}
